@@ -28,9 +28,6 @@ namespace Defer {
   inline namespace DeferImplv1 {
     template <class Function> class DeferedObject {
       public:
-        DeferedObject(DeferedObject&&) = delete;
-        DeferedObject(const DeferedObject&&) = delete; 
-
         template <class Object> DeferedObject(
             Object&& f
         ) : DeferedFunction(
@@ -49,7 +46,7 @@ namespace Defer {
 
   template <class Object> auto ReturnDeferedObject(
     Object&& Function
-  ) -> Defer::DeferedObject<Object> {
+  ) -> DeferedObject<Object> {
     return {
       std::forward<Object>(Function)
     };
@@ -63,7 +60,7 @@ namespace Defer {
     [[maybe_unused]] const auto&                      \
       __DEFER_UNIQUE_VAR(DeferedObject) =             \
         Defer::ReturnDeferedObject(Lambda);
-  
+
   #define defer(FunctionBody) defered([&]() {FunctionBody;})
 
 } /* namespace Defer */
